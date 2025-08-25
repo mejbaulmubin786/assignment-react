@@ -1,7 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 import doc1 from "../assets/doc1.png";
 
 const Signup = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      setSuccess("Account created successfully!");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-blue-900">
       <div className="flex bg-blue-100 rounded-2xl shadow-lg w-4/5 max-w-5xl overflow-hidden">
@@ -12,11 +33,13 @@ const Signup = () => {
             Already have account? <a href="#" className="text-blue-600">Login here</a>
           </p>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSignup}>
             <div>
               <input
                 type="text"
                 placeholder="Enter your name here"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -24,6 +47,8 @@ const Signup = () => {
               <input
                 type="email"
                 placeholder="Enter your email here"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -31,6 +56,8 @@ const Signup = () => {
               <input
                 type="password"
                 placeholder="Enter your password here"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -49,9 +76,13 @@ const Signup = () => {
               Submit
             </button>
           </form>
+
+
+          {success && <p className="mt-4 text-green-600 text-sm">{success}</p>}
+          {error && <p className="mt-4 text-red-600 text-sm">{error}</p>}
         </div>
 
-        {/* Right side image */}
+
         <div className="w-1/2 bg-blue-50 flex items-center justify-center p-8">
           <img
             src={doc1}
