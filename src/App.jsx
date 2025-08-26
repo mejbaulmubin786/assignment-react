@@ -1,14 +1,19 @@
-import { useState } from 'react'
-import Signup from './Layout/Signup'
+import React, { useState } from "react";
+import Login from "./Layout/Login";
+import Signup from "./Layout/Signup";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [showSignup, setShowSignup] = useState(false);
 
   return (
-    <>
-      <Signup />
-    </>
-  )
-}
+    <div>
+      {showSignup ? (
+        <Signup onSwitch={() => setShowSignup(false)} />
+      ) : (
+        <Login onSwitch={() => setShowSignup(true)} />
+      )}
+    </div>
+  );
+};
 
-export default App
+export default App;
